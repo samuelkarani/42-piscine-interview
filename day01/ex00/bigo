@@ -1,0 +1,2 @@
+time O(n * m ) n = input m = size of int
+space O(1)
