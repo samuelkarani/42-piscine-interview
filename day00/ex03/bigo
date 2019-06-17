@@ -1,0 +1,2 @@
+time O(1) + O(m) where m = size of chained list
+space O(n)
