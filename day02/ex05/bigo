@@ -1,0 +1,2 @@
+time O(n) but O(log(n)) amortized
+space O(1)

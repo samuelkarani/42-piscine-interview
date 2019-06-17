@@ -1,0 +1,2 @@
+time O(n ^ 2) amortized O(NlogN)
+space O(1)

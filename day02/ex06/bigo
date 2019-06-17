@@ -1,0 +1,11 @@
+findPotentialCriminals
+time O(log(n) + k) where k = no of items in searched range
+space O(k)
+
+sortCriminals
+time O(d(n + b)) where d = no of sort iterations,  b = 10
+space O(n + k)
+
+getDescription:
+time O(1)
+space O(1)
