@@ -1,0 +1,2 @@
+space O(m) where m is no of "on" bits
+time O(1)

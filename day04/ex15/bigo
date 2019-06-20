@@ -1,0 +1,2 @@
+time O(s) where s = longest sequence of "1" bits
+space O(1)

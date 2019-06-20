@@ -1,0 +1,2 @@
+time O(n) n = dist
+space O(1)

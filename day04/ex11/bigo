@@ -1,0 +1,2 @@
+time O(i) worst case where i is the largest 2^i number that divides an even input number
+space O(1)
