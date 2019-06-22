@@ -1,0 +1,2 @@
+time O(2^log(n))
+space O(n)

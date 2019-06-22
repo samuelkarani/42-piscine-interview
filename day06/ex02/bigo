@@ -1,0 +1,2 @@
+time O(3^n) where n is no of games
+space O(1)

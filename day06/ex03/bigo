@@ -1,0 +1,2 @@
+time O(k) where k = elements! / (elements - k)! / elements ^ k == 1 - minPercentage
+space O(1)
