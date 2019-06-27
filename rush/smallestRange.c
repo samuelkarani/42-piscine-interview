@@ -6,7 +6,7 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/26 19:49:19 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/06/26 22:06:47 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/06/26 23:51:27 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,68 @@ struct s_range smallestRange(struct s_array **arrays, int k)
     return min;
 }
 
+struct s_range getRange(struct s_array **arrays, int k, int *indexes)
+{
+    struct s_range range;
+    int value;
+    range.min = INT_MAX; range.max = INT_MIN;
+    for (int i = 0; i < k; i++)
+    {
+        value = arrays[i]->arr[indexes[i]];
+        if (value < range.min)
+            range.min = value;
+        if (value > range.max)
+            range.max = value;
+    }
+    return (range);
+}
+
+int getSmallest(struct s_array **arrays, int k, int *indexes)
+{
+    int idx = -1;
+    int small = INT_MAX;
+    int value;
+    for (int i = 0; i < k; i++)
+    {
+        value = arrays[i]->arr[indexes[i]];
+        if (value < small) {
+            small = value;
+            idx = i;
+        }
+    }
+    if (indexes[idx] == arrays[idx]->n - 1)
+        return (-1);
+    return (idx);
+}
+
+struct s_range smallestRange2(struct s_array **arrays, int k)
+{
+    int indexes[k];
+    struct s_range current;
+    struct s_range small;
+    int idx;
+
+    memset(indexes, 0, sizeof(int) * k); // initialize the smallest range
+    small = getRange(arrays, k, indexes);
+    while ((idx = getSmallest(arrays, k, indexes)) != -1)
+    {
+        // move on to the next element in the array which contains the minimum element
+        indexes[idx]++;
+        print_arr(indexes, k);
+        // get the new range
+        current = getRange(arrays, k, indexes);
+        print_range(current);
+            // update the smallest range if necessary
+        if (current.max - current.min < small.max - small.min)
+        {
+            small.min = current.min;
+            small.max = current.max;
+        }
+        print_range(small);
+    }
+    return (small);
+}
+
 int main(void)
 {
     int arr1[] = {4, 10, 15, 24, 26};
@@ -105,6 +167,6 @@ int main(void)
         arrays_copy[i] = malloc(sizeof(struct s_array));
         memcpy(arrays_copy[i], &arrays[i], sizeof(struct s_array));
     }
-    struct s_range res = smallestRange(arrays_copy, k);
+    struct s_range res = smallestRange2(arrays_copy, k);
     print_range(res);
 }
