@@ -20,6 +20,10 @@ int main(void)
 	insertionSort(players);
 	printPlayers(players);
 
+	printf("doing the selection sort...\n");
+	insertionSort(players);
+	printPlayers(players);
+
 	return (0);
 }
 
