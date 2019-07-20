@@ -6,7 +6,7 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 17:18:00 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/06/14 17:34:34 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/07/19 22:21:43 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	searchShifted(int *rocks, int length, int value)
 
     found = 0;
     i = -1;
-    while (++i < value - 1)
+    while (++i < length - 1)
     {
         if (rocks[i] == value)
         {

@@ -25,5 +25,6 @@ void printPlayers(struct s_player **players);
   &  your own other function
   --------------------------------*/
 
+void selectionSort(struct s_player **players);
 
 #endif
