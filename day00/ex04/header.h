@@ -14,7 +14,7 @@ int howManyJesus(char *bible, char *jesus);
 
 
 /*--------------------------------
-  ?? test function used in main 
+  ?? test function used in main
   --------------------------------*/
 
 char *readFile(void);
@@ -23,6 +23,6 @@ char *readFile(void);
 /*--------------------------------
   &  your own other function
   --------------------------------*/
-
+size_t hash(char *input, size_t n);
 
 #endif

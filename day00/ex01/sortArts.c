@@ -6,7 +6,7 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/11 14:52:31 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/06/11 23:17:33 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/07/26 15:08:01 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,66 @@
 static int ascending(char *a, char *b)
 {
 	return strcmp(a, b) <= 0;
+}
+
+static int ascending_s(struct s_art *a, struct s_art *b)
+{
+	return strcmp(a->name, b->name) <= 0;
+}
+
+static int	len(struct s_art **arts)
+{
+	int count = 0;
+	while (*arts++)
+		count++;
+	return count;
+}
+
+static void swap(struct s_art *a, struct s_art *b)
+{
+	char *name = a->name;
+	int price = a->price;
+	a->name = b->name;
+	a->price = b->price;
+	b->name = name;
+	b->price = price;
+}
+
+void insertion(struct s_art **arts)
+{
+	struct s_art *art;
+	int i = 0, hole;
+	while (arts[i + 1])
+	{
+		hole = i + 1;
+		art = arts[hole];
+		while (hole > 0 && !ascending(arts[hole - 1]->name, art->name))
+		{
+			arts[hole] = arts[hole - 1];
+			hole--;
+		}
+		arts[hole] = art;
+		i++;
+	}
+}
+
+void selection(struct s_art **arts)
+{
+	int i, j, idx;
+	i = 0;
+	while (arts[i])
+	{
+		idx = i;
+		j = i;
+		while (arts[j])
+		{
+			if (!ascending_s(arts[i], arts[j]))
+				idx = j;
+			j++;
+		}
+		swap(arts[i], arts[idx]);
+		i++;
+	}
 }
 
 void bubble(struct s_art **arts)
@@ -39,11 +99,6 @@ void bubble(struct s_art **arts)
 		}
 		i++;
 	}
-}
-
-static int ascending_s(struct s_art *a, struct s_art *b)
-{
-	return strcmp(a->name, b->name) <= 0;
 }
 
 void merge(struct s_art **a, int an, struct s_art **b, int bn, struct s_art **arts)
@@ -81,17 +136,12 @@ void merge_sort(struct s_art **arts, int n)
 	merge(a, mid, b, n - mid, arts);
 }
 
-int	len(struct s_art **arts)
-{
-	int count = 0;
-	while (*arts++)
-		count++;
-	return count;
-}
-
 void sortArts(struct s_art **arts)
 {
+	if (!arts || !arts[0])
+		return ;
 	// bubble(arts);
-	if (arts)
-		merge_sort(arts, len(arts));
+	// insertion(arts);
+	// selection(arts);
+	merge_sort(arts, len(arts));
 }

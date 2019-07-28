@@ -5,6 +5,14 @@
 
 #include "header.h"
 
+static int	len(struct s_art **arts)
+{
+	int count = 0;
+	while (*arts++)
+		count++;
+	return count;
+}
+
 int main(void)
 {
 	struct s_art **arts;
@@ -154,7 +162,7 @@ struct s_art **getArts(int *n)
 	for(int i = 0; tab[i]; i++){
 		tmp = getArts_createStruct(strdup(tab[i]));
 		if (tmp)
-			art[(art_index++)] = tmp; 
+			art[(art_index++)] = tmp;
 	}
 	art[(art_index)] = NULL;
 	for (int i = 0; tab[i] ; i++){

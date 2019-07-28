@@ -16,6 +16,9 @@ int main(void)
 	launch your test here
 	--------------------*/
 
+	printf("%s", decompress("<first,second>The @ @: was alright,\nbut the @ @ was tough @.."));
+	// printf("%s", decompress(cBook));
+
 	return (0);
 }
 

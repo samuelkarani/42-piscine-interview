@@ -6,21 +6,13 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/11 18:36:40 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/06/12 01:00:33 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/07/26 18:46:50 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <string.h>
 #include "header.h"
-
-int	len(struct s_art **arts)
-{
-	int count = 0;
-	while (*arts++)
-		count++;
-	return count;
-}
 
 size_t hash(char *input)
 {
@@ -66,9 +58,9 @@ int	dictInsert(struct s_dict *dict, char *key, struct s_art *value)
     struct s_item *elem, *p;
     size_t h;
 
-    if (!dict || !dict->items || !dict->capacity || !key) // NULL values OK
+    if (!dict || !dict->items || dict->capacity <= 0 || !key) // NULL value OK
         return 0;
-    
+
     elem = create_item(key, value);
     h = hash(key) % dict->capacity;
     if ((p = dict->items[h]))
@@ -113,4 +105,3 @@ int searchPrice(struct s_dict *dict, char *name)
         return found->price;
     return -1;
 }
-

@@ -19,7 +19,7 @@ int searchPrice(struct s_art **arts, int n, char *name);
 
 
 /*--------------------------------
-  ?? test function used in main 
+  ?? test function used in main
   --------------------------------*/
 
 struct s_art **getArts(int *n);
@@ -28,6 +28,7 @@ struct s_art **getArts(int *n);
 /*--------------------------------
   &  your own other function
   --------------------------------*/
+int searchPriceRecursive(struct s_art **arts, char *name, int start, int end);
+int searchPriceIterative(struct s_art **arts, int n, char *name);
 
-int	len(struct s_art **arts);
 #endif

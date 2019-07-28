@@ -6,7 +6,7 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/11 22:17:45 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/06/12 01:15:20 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/07/27 18:51:12 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,7 @@
 #include <stdlib.h>
 #include "header.h"
 
-size_t hash(char *input)
-{
-    size_t sum = 0;
-
-    if (!input)
-        return 0;
-    while (*input)
-        sum += *input++;
-    return sum;
-}
-
-struct s_item *create_item(char *key, int value)
+static struct s_item *create_item(char *key, int value)
 {
     struct s_item *new;
 
@@ -35,6 +24,46 @@ struct s_item *create_item(char *key, int value)
     new->value = value;
     new->next = NULL;
     return new;
+}
+
+static char	*fstrjoin(char const *s1, char const *s2)
+{
+	char	*ret;
+	int		l;
+
+	if (!s1 && !s2)
+		return (NULL);
+	l = 0;
+	if (s1)
+		l += strlen(s1);
+	if (s2)
+		l += strlen(s2);
+	if ((ret = malloc(l + 1)) == NULL)
+		return (NULL);
+	if (s1)
+		strcpy(ret, s1);
+	if (s2)
+		strcat(ret, s2);
+	return (ret);
+}
+
+static char	*fstrsub(char const *s, int start, int len)
+{
+	char *res = malloc(sizeof(char) * len + 1);
+	int i = 0;
+	while (len-- > 0)
+		res[i++] = s[start++];
+	res[i] = 0;
+	return res;
+}
+
+size_t hash(char *str)
+{
+    size_t res = 5381;
+    int c;
+    while ((c = *str++))
+        res = ((res << 5) + res) + c; /* res * 33 + c */
+    return res;
 }
 
 struct s_dict *dictInit(int capacity)
@@ -59,7 +88,7 @@ int	dictInsert(struct s_dict *dict, char *key, int value)
     struct s_item *elem, *p;
     size_t h;
 
-    if (!dict || !dict->items || !dict->capacity || !key) // NULL values OK
+    if (!dict || !dict->items || dict->capacity <= 0 || !key) // NULL values OK
         return 0;
     elem = create_item(key, value);
     h = hash(key) % dict->capacity;
@@ -88,72 +117,50 @@ int	dictSearch(struct s_dict *dict, char *key)
     {
         while (p && (c = strcmp(p->key, key) != 0))
             p = p->next;
-        return c == 0 ? h : -1;
+        return c == 0 ? p->value : -1;
     }
     else
         return -1;
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+void len_words(struct s_dict *dict, int res[2], char **words)
 {
-	char	*ret;
-	int		l;
-
-	if (!s1 && !s2)
-		return (NULL);
-	l = 0;
-	if (s1)
-		l += strlen(s1);
-	if (s2)
-		l += strlen(s2);
-	if ((ret = malloc(l + 1)) == NULL)
-		return (NULL);
-	if (s1)
-		strcpy(ret, s1);
-	if (s2)
-		strcat(ret, s2);
-	return (ret);
-}
-
-
-size_t len_words(struct s_dict *dict, size_t *no, char **words)
-{
-    int capacity;
-    size_t sum, idx;
+    int size, idx, i;
     struct s_item *item;
 
-    capacity = dict->capacity;
-    sum = idx = 0;
-    while (--capacity >= 0)
+    i = size = idx = 0;
+    while (i < dict->capacity)
     {
-        if ((item = (dict->items)[capacity]))
+        if ((item = (dict->items)[i]))
         {
             while (item)
             {
-                sum += strlen(item->key);
-                words[idx++] = item->key;
+                size += strlen(item->key);
+                words[item->value] = item->key;
                 item = item->next;
+				idx++;
             }
         }
+		i++;
     }
-    *no = idx;
-    return sum;
+    res[0] = idx;
+	res[1] = size;
 }
 
-char    *header(char **words, size_t wlen, size_t no)
+char *getHeader(char **words, int num, int size)
 {
     char *res;
-    size_t i, n, idx;
+    int i, n, idx;
 
-    res = malloc(wlen + no - 1 + 2 + 1);
-    res[0] = '<';
-    i = 1;
+    res = malloc(size + (num - 1) + (2) + 1);
+    i = 0;
+    res[i++] = '<';
     idx = -1;
-    while (++idx < no)
+    while (++idx < num)
     {
         n = strlen(words[idx]);
         strncpy(res + i, words[idx], n);
-        if (idx + 1 < no)
+        if (idx + 1 < num)
             res[i++ + n] = ',';
         i += n;
     }
@@ -164,33 +171,50 @@ char    *header(char **words, size_t wlen, size_t no)
 
 char *compress(char *book, struct s_dict *dict)
 {
-    char    *res, *word, *h, *tmp;
-    size_t  wlen, no, i, j, k, hsh;
-    char    *words[255];
+    char *res, *word, *header;
+    int strings[2], len, index;
+	size_t i, start, idx;
+    char *words[256];
 
-    no = 0;
-    wlen = len_words(dict, &no, words);
-    h = header(words, wlen, no);
+	words[255] = NULL;
+    len_words(dict, strings, words);
+    header = getHeader(words, strings[0], strings[1]);
     res = malloc(strlen(book) + 1);
-    i = k = 0;
+    i = start = idx = 0;
     while (book[i])
     {
-        if (i == 0 || (!isspace(book[i]) && i > 1 && isspace(book[i - 1])))
-        {
-            j = i;
-            while (!isspace(book[j]))
-                j++;
-            word = strndup(book + i, j);
-            if ((hsh = dictSearch(dict, word)) != -1)
+		if (!isspace(book[i]) && i > 0 && isspace(book[i - 1]))
+			start = i;
+		else if ((isspace(book[i]) && i > 0 && !isspace(book[i - 1]))
+			|| (!isspace(book[i]) && !book[i + 1]))
+		{
+			i = start;
+			while (isalpha(book[i]))
+				i++;
+			len = i - start;
+			word = fstrsub(book, start, len);
+			index = dictSearch(dict, word);
+            if (index != -1)
             {
-                res[k++] = '@';
-                res[k++] = hsh;
+                res[idx++] = '@';
+                res[idx++] = index + 1;
             }
-        }
-        i++;
+			else
+			{
+				strncpy(res + idx, word, len);
+				idx += len;
+			}
+			while (book[i] && !isspace(book[i]))
+				res[idx++] = book[i++];
+			res[idx++] = book[i];
+			if (!book[i])
+				break;
+		}
+		else if (isspace(book[i]))
+			res[idx++] = book[i];
+		i++;
     }
-    tmp = res;
-    res = ft_strjoin(h, res);
-    free(h); free(res);
-    return h;
+    res = fstrjoin(header, res);
+    free(header);
+    return res;
 }

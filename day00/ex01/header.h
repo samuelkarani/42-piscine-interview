@@ -18,7 +18,7 @@ struct s_art {
 void  sortArts(struct s_art **arts);
 
 /*--------------------------------
-  ?? test function used in main 
+  ?? test function used in main
   --------------------------------*/
 
 struct s_art **getArts(void);
@@ -27,6 +27,9 @@ struct s_art **getArts(void);
 /*--------------------------------
   &  your own other function
   --------------------------------*/
+void merge_sort(struct s_art **arts, int n);
 void bubble(struct s_art **arts);
+void selection(struct s_art **arts);
+void insertion(struct s_art **arts);
 
 #endif

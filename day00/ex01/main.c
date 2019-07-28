@@ -151,7 +151,7 @@ struct s_art **getArts(void)
 	for(int i = 0; tab[i]; i++){
 		tmp = getArts_createStruct(strdup(tab[i]));
 		if (tmp)
-			art[(art_index++)] = tmp; 
+			art[(art_index++)] = tmp;
 	}
 	art[(art_index)] = NULL;
 

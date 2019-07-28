@@ -8,31 +8,31 @@
 int main(void)
 {
 	char *book;
-	// char **words;
-	// int lenWords;
+	char **words;
+	int lenWords;
 	struct s_dict *dict;
 
-	book = "The first second was alright,\nbut the second second was tough.";
+	book = "The first second: was alright,\nbut the second second was tough first..";
 	char *wds[2] = {"first", "second"};
 	dict = dictInit(2);
-	dictInsert(dict, wds[0], 1);
-	dictInsert(dict, wds[1], 3);
-	printf("%s", compress(book, dict));
+	dictInsert(dict, wds[0], 0);
+	dictInsert(dict, wds[1], 1);
+	// printf("%s\n", compress(book, dict));
 
 	//getting the book and the list of words
-	// book = readBookFile();
-	// readWordsFile(&words, &lenWords);
-	
+	book = readBookFile();
+	readWordsFile(&words, &lenWords);
+
 	// /*-------------------
 	// launch your test here
 	// --------------------*/
-	
-	// dict = dictInit(lenWords);
-	
-	// for (int i = 0; i < lenWords; i++)
-	// 	dictInsert(dict, words[i], i);
-	
-	// printf("%s", compress(book, dict));
+
+	dict = dictInit(lenWords);
+
+	for (int i = 0; i < lenWords; i++)
+		dictInsert(dict, words[i], i);
+
+	printf("%s", compress(book, dict));
 
 	return (0);
 }

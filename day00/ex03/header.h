@@ -39,7 +39,7 @@ int searchPrice(struct s_dict *dict, char *name);
 
 
 /*--------------------------------
-  ?? test function used in main 
+  ?? test function used in main
   --------------------------------*/
 
 struct s_art **getArts(void);
@@ -49,6 +49,6 @@ struct s_art **getArts(void);
   &  your own other function
   --------------------------------*/
 
-int	len(struct s_art **arts);
+  struct s_item *create_item(char *key, struct s_art *value);
 
 #endif
