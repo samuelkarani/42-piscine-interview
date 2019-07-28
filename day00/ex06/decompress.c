@@ -6,7 +6,7 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/27 16:07:29 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/07/27 20:16:33 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/07/27 22:27:37 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,17 @@ static void exitError(char *msg)
 	exit(1);
 }
 
-static void printString(struct s_string *s)
-{
-	printf("%s\n", s->content);
-}
-
-static void printOccurrence(struct s_list *lst)
-{
-	struct s_elem *elem;
-	int i = 0;
-	while (i < lst->len)
-	{
-		elem = lst->elems[i];
-		printf("%s appears %d\n", elem->word, elem->occurence);
-		i++;
-	}
-}
+// static void printOccurrence(struct s_list *lst)
+// {
+// 	struct s_elem *elem;
+// 	int i = 0;
+// 	while (i < lst->len)
+// 	{
+// 		elem = lst->elems[i];
+// 		printf("%s appears %d\n", elem->word, elem->occurence);
+// 		i++;
+// 	}
+// }
 
 static char	*fstrsub(char const *s, int start, int len)
 {
@@ -65,7 +60,8 @@ struct s_string *stringInit(void)
 	res->content = malloc(INIT_SIZE * sizeof(char));
 	if (!res->content)
 		return NULL;
-	res->length = 0;
+	res->content[0] = 0;
+	res->length = 1;
 	res->capacity = INIT_SIZE;
 	return res;
 }
@@ -76,23 +72,20 @@ int	stringAppend(struct s_string *s, char *add) //return 0 = FAIL, 1 = SUCCESS
 	int len, size;
 
 	len = strlen(add);
-	size = s->length + len + 1;
-	if (len + 1 > s->capacity)
+	size = s->length + len;
+	if (size > s->capacity)
 	{
 		if (!(content = malloc(sizeof(char) * size * 2)))
 			return 0;
-		strncpy(content, s->content, s->length);
+		strcpy(content, s->content);
 		strcpy(content + s->length - 1, add);
 		free(s->content);
 		s->content = content;
-		s->length = size;
 		s->capacity = size * 2;
 	}
 	else
-	{
-		strcpy(s->content + s->length, add);
-		s->length = size;
-	}
+		strcpy(s->content + s->length - 1, add);
+	s->length = size;
 	return 1;
 }
 
@@ -160,7 +153,6 @@ char *decompress(char *cBook)
 		i++;
 	}
 	wordsList = getWordList(cBook + start, i - start, n);
-	printOccurrence(wordsList);
 	s = stringInit();
 	i++;
 	while (cBook[i])
@@ -181,8 +173,7 @@ char *decompress(char *cBook)
 		else
 			break ;
 		i++;
-		printString(s);
 	}
-	printOccurrence(wordsList);
+	// printOccurrence(wordsList);
 	return s->content;
 }

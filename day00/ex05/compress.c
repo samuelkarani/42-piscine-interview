@@ -6,7 +6,7 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/11 22:17:45 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/07/27 18:51:12 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/07/27 21:54:50 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ struct s_dict *dictInit(int capacity)
 
     if (capacity <= 0)
         return NULL;
-
+	if (capacity > 256)
+		capacity = 256;
     dict = malloc(sizeof(struct s_dict));
     items = malloc(sizeof(struct s_item) * capacity);
     dict->capacity = capacity;

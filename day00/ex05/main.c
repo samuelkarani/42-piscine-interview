@@ -12,21 +12,22 @@ int main(void)
 	int lenWords;
 	struct s_dict *dict;
 
+	/*-------------------
+	launch your test here
+	--------------------*/
+
+	// test 1
 	book = "The first second: was alright,\nbut the second second was tough first..";
 	char *wds[2] = {"first", "second"};
 	dict = dictInit(2);
 	dictInsert(dict, wds[0], 0);
 	dictInsert(dict, wds[1], 1);
-	// printf("%s\n", compress(book, dict));
+	printf("%s\n", compress(book, dict));
 
+	// test 2
 	//getting the book and the list of words
 	book = readBookFile();
 	readWordsFile(&words, &lenWords);
-
-	// /*-------------------
-	// launch your test here
-	// --------------------*/
-
 	dict = dictInit(lenWords);
 
 	for (int i = 0; i < lenWords; i++)
