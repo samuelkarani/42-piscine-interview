@@ -17,7 +17,7 @@ int main(void)
 	launch your test here
 	--------------------*/
 	printf("%d\n", minimumMoves(node));
-	node = getBoardFromFile("board2.slm");
+	node = getBoardFromFile("board1.slm");
 	printf("%d\n", minimumMoves(node));
 	return (0);
 }

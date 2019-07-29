@@ -32,9 +32,15 @@ struct s_item
 	struct s_item *next;
 };
 
-struct s_stack
+struct s_queue
 {
-	struct s_item *item;
+	struct s_item *first;
+	struct s_item *last;
 };
+
+struct s_queue *init(void);
+void enqueue(struct s_queue *queue, struct s_node *node, int moves);
+struct s_node *dequeue(struct s_queue *queue);
+int isEmpty(struct s_queue *queue);
 
 #endif

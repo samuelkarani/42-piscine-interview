@@ -6,120 +6,72 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 21:17:59 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/06/14 00:47:34 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/07/28 23:43:54 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <limits.h>
 #include "header.h"
 
-struct s_stack *initStack()
+struct s_queue *init(void)
 {
-	struct s_stack *s;
-	s = malloc(sizeof(struct s_stack));
-	s->item = NULL;
-	return s;
+	struct s_queue *queue = malloc(sizeof(struct s_queue));
+	queue->first = queue->last = NULL;
+	return queue;
 }
 
-void push(struct s_stack *stack, struct s_node *node)
+void enqueue(struct s_queue *queue, struct s_node *node, int moves)
 {
-	struct s_item *item, *new;
-
-	if (!stack)
+	struct s_item *oldLast, *new;
+	if (!queue || !node)
 		return;
 	new = malloc(sizeof(struct s_item));
 	new->node = node;
 	new->next = NULL;
-	item = stack->item;
-	stack->item = new;
-	new->next = item;
+	oldLast = queue->last;
+	queue->last = new;
+	if (!queue->first)
+		queue->first = new;
+	else
+		oldLast->next = new;
+	node->value = moves;
 }
 
-struct s_node *pop(struct s_stack *stack)
+struct s_node *dequeue(struct s_queue *queue)
 {
-	struct s_item *item;
-
-	if (!stack || !stack->item)
+	struct s_item *oldFirst;
+	if (!queue || !queue->first)
 		return NULL;
-	item = stack->item;
-	stack->item = item->next;
-	return item->node;
+	oldFirst = queue->first;
+	queue->first = oldFirst->next;
+	if (!queue->first)
+		queue->last = NULL;
+	return oldFirst->node;
 }
 
-struct s_node *peek(struct s_stack *stack)
+int isEmpty(struct s_queue *queue)
 {
-	if (!stack || !stack->item)
-		return NULL;
-	return stack->item->node;
-}
-
-int isEmpty(struct s_stack *stack)
-{
-	return !stack->item;
-}
-
-int contains(struct s_stack *stack, struct s_node *node)
-{
-	struct s_item *item = stack->item;
-	if (!stack || !item)
-		return 0;
-	while (item)
-	{
-		if (item->node == node)
-			return 1;
-		item = item->next;
-	}
-	return 0;
+	return !(queue && queue->first);
 }
 
 int minimumMoves(struct s_node *begin)
 {
-	// dead end contains final
-	struct s_stack *stack;
-	struct s_stack *lst;
+	struct s_queue *queue;
 	struct s_node *node;
-	int smallest, count, save, n;
 
 	if (!begin)
 		return -1;
-	smallest = INT_MAX;
-	count = 0;
-	stack = initStack();
-	lst = initStack();
-	push(stack, begin);
-	while (!isEmpty(stack))
+	queue = init();
+	enqueue(queue, begin, 0);
+	while (!isEmpty(queue))
 	{
-		node = pop(stack);
-		if (!node->next)
-		{
-			n = count - save;
-			while (n-- > 0)
-				pop(lst);
-			count = save;
-		}
-		else if (node->isFinal)
-		{
-			if (count < smallest)
-				smallest = count;
-			count = save;
-		}
-		else if (!contains(lst, node))
-		{
-			push(lst, node);
-			count++;
-			if (node->next)
-				push(stack, node->next);
-			if (node->random && node->random != node->next)
-			{
-				push(stack, node->random);
-				save = count;
-			}
-		}
-		else
-		{
-		}
-		
+		node = dequeue(queue);
+		if (node->isFinal)
+			return node->value;
+		if (node->next)
+			enqueue(queue, node->next, node->value + 1);
+		if (node->random && node->random != node)
+			enqueue(queue, node->random, node->value + 1);
 	}
-	return smallest;
+	return -1;
 }

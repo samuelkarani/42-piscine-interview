@@ -6,7 +6,7 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/13 17:32:12 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/06/13 17:56:48 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/07/28 16:43:02 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,7 @@ int find_idx(struct s_node *haystack, struct s_node *needle)
 
 struct s_node *find(struct s_node *node, int idx)
 {
-	if (idx < 0)
-		return NULL;
-	while (idx--)
+	while (idx-- > 0)
 		node = node->next;
 	return node;
 }
@@ -62,8 +60,6 @@ struct s_node *cloneGameBoard(struct s_node *node)
 	{
 		if (node->random)
 			res->random = find(r, find_idx(n, node->random));
-		else
-			res->random = NULL;
 		node = node->next;
 		res = res->next;
 	}

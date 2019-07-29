@@ -32,7 +32,6 @@ int main(void)
 	printf("added a - isempty %d\n", isEmpty(q));
 	printf("peek %s dequeue %s isempty %d\n", peek(q), dequeue(q), isEmpty(q));
 	printf("peek %s dequeue %s isempty %d\n", peek(q), dequeue(q), isEmpty(q));
-	printf("isempty %d\n", isEmpty(q));
 
 	return (0);
 }
