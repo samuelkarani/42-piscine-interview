@@ -26,11 +26,18 @@ int readBlock(FILE *f, int *arr, int size);
 
 void writeFile(char *filename, int *arr, int n);
 
+void writeFileFP(FILE *f, int *arr, int n);
+
 int fileIsSorted(char *filename);
 
 /*--------------------------------
   &  your own other function
   --------------------------------*/
 
+typedef struct _s_block
+{
+	int i;
+	int n;
+} 			t_block;
 
 #endif

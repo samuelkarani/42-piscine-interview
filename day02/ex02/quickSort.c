@@ -6,13 +6,13 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/14 13:47:01 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/07/19 17:34:08 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/07/28 23:54:11 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-int len(struct s_player **players)
+static int len(struct s_player **players)
 {
     int count = 0;
     while (players[count])
@@ -77,4 +77,3 @@ void quickSort(struct s_player **players)
 {
     sort(players, 0, len(players) - 1);
 }
-

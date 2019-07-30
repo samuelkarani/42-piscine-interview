@@ -14,8 +14,8 @@ int main(void)
 	launch your test here
 	--------------------*/
 
-	// externalSort(SCOREFILE, SORTEDFILE, 8000);
-	// printf("The file %s is%s sorted\n", SORTEDFILE, (fileIsSorted(SORTEDFILE)) ? "" : " NOT");
+	externalSort(SCOREFILE, SORTEDFILE, 8000);
+	printf("The file %s is%s sorted\n", SORTEDFILE, (fileIsSorted(SORTEDFILE)) ? "" : " NOT");
 
 	return (0);
 }
@@ -102,6 +102,17 @@ void writeFile(char *filename, int *arr, int n) {
 		fprintf(f, "%d\n", arr[i]);
 	}
 	fclose(f);
+}
+
+void writeFileFP(FILE *f, int *arr, int n) {
+	if (!f)
+	{
+		dprintf(STDERR_FILENO, "Invalid FILE pointer\n");
+		exit(EXIT_FAILURE);
+	}
+	for (int i = 0; i < n; i++) {
+		fprintf(f, "%d\n", arr[i]);
+	}
 }
 
 int fileIsSorted(char *filename) {
