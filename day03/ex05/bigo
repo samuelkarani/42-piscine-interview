@@ -1,0 +1,7 @@
+createTrie
+time O(nm) n = no of words m = avg length of words
+space O(nm)
+
+understand
+time O(n * m ^ k) n = no of given characters, m = avg length of words , k = no of ?
+space O(1)

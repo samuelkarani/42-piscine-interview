@@ -11,14 +11,14 @@ int main(int ac, char **av)
 	struct s_trie *trie;
 
 	trie = NULL;
-	
+
 	if (ac >= 2){
 		/*-------------------
 		  launch your test here
 		  --------------------*/
-		// if (!(trie = createTrie(g_dict)))
-		// 	return (-1);
-		// printf("%s\n", understandAll(av[1], trie));
+		if (!(trie = createTrie(g_dict)))
+			return (-1);
+		printf("%s\n", understandAll(av[1], trie));
 	}else{
 		printf("Usage: %s 'wo?d'\n", av[0]);
 	}
@@ -50,7 +50,7 @@ char *understandAll(char *sentence, struct s_trie *trie) {
 
 	output = strdup(sentence);
 	token = strtok(output, separator);
-	while(token != NULL) 
+	while(token != NULL)
 	{
 		if (strchr(token, '?')) {
 			if (!(replace = understand(token, trie)))

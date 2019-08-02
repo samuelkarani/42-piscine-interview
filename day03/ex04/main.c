@@ -16,9 +16,9 @@ int main(void)
 	/*-------------------
 	launch your test here
 	--------------------*/
-	// printf("inserting some monkey\n");
-	// insertMonkey(&root, randomMonkey());
-	// printBinaryTree(root);
+	printf("inserting some monkey\n");
+	insertMonkey(&root, randomMonkey());
+	printBinaryTree(root);
 
 	return (0);
 }

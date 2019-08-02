@@ -18,9 +18,15 @@ int main(void)
         launch your test here
         --------------------*/
 
-	// node = findParent(root, "Dinosauria", "Homo sapiens");
-	// if (node)
-	// 	printf("%s\n", node->name);
+	node = findParent(root, "Dinosauria", "Homo sapiens");
+	if (node)
+		printf("%s\n", node->name);
+	node = findParent(root, "Lynx", "Marsupialia"); // returns the "Mammalia" node
+	if (node)
+		printf("%s\n", node->name);
+	node = findParent(root, "Dinosauria", "I do not exist !"); // returns NULL
+	if (node)
+		printf("%s\n", node->name);
 
 	return (0);
 }

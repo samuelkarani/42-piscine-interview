@@ -23,7 +23,7 @@ char *understand(char *word, struct s_trie *trie);
 
 
 /*--------------------------------
-  ?? test function used in main 
+  ?? test function used in main
   --------------------------------*/
 extern char *g_dict[];
 
@@ -34,5 +34,7 @@ char *understandAll(char *sentence, struct s_trie *trie);
   &  your own other function
   --------------------------------*/
 
+void printWord(struct s_node *node, char *word);
+void printTrie(struct s_node *node, char *buffer, int i);
 
 #endif
