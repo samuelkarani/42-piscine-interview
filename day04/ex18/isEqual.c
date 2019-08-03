@@ -6,7 +6,7 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/18 20:37:37 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/06/18 21:00:31 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/08/02 17:37:55 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,4 +15,9 @@
 int	isEqual(int a, int b)
 {
     return (~a & b);
+}
+
+int	isEqual2(int a, int b)
+{
+    return (a ^ b);
 }
