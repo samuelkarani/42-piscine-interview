@@ -1,15 +1,15 @@
-**Day 0**: Arrays and Strings
+- [x] **Day 0**: Arrays and Strings
 
-**Day 1**: Lists, Stacks and Queues
+- [x] **Day 1**: Lists, Stacks and Queues
 
-**Day 2**: Sorting algorithms
+- [x] **Day 2**: Sorting algorithms
 
-**Day 3**: Trees and Graphs
+- [x] **Day 3**: Trees and Graphs
 
-**Day 4**: Bit manipulation
+- [x] **Day 4**: Bit manipulation
 
-**Day 5**: Recursive programming
+- [x] **Day 5**: Recursive programming
 
-**Day 6**: Recursive n^2 & Greedy Algorithms
+- [x] **Day 6**: Recursive n^2 & Greedy Algorithms
 
-**Day 7**:
+- [x] **Day 7**:
