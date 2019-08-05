@@ -6,7 +6,7 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 15:46:10 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/06/19 20:04:11 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/08/04 16:53:03 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,44 +15,27 @@
 #include <stdlib.h>
 #include "header.h"
 
-char *strjoin(char *a, char *b)
-{
-	int alen, blen;
-	char *res = malloc((alen = strlen(a)) + (blen = strlen(b)) + 1);
-	strncpy(res, a, alen);
-	strncpy(res + alen, b, blen);
-	return res;
-}
-
 char *rest(char *s, int i)
 {
-	int l;
-	if ((l = strlen(s)) == 1)
-		return strdup("");
-	char *res = malloc(l);
-	strncpy(res, s, i);
-	memmove(res + i, s + i + 1, l - i - 1);
+	char *res = strdup(s);
+	memmove(res + i, s + i + 1, strlen(s) - i - 1);
 	return res;
 }
 
-char *create(char c)
+void helper(char *cur, int idx, char *rst, int n)
 {
-	char *res;
-	asprintf(&res, "%c", c);
-	return res;
-}
-
-void helper(char *cur, char *rst)
-{
-	int l;
-	if (!(l = strlen(rst)))
+	if (idx == n)
 		printf("%s\n", cur);
-	int i = -1;
-	while (++i < l)
-		helper(strjoin(cur, create(rst[i])), rest(rst, i));
+	for (int i = 0; i < n - idx; i++)
+	{
+		cur[idx] = rst[i];
+		char *nrst = rest(rst, i);
+		helper(cur, idx + 1, nrst, n);
+	}
 }
 
 void printPermutations(char *str)
 {
-	helper(strdup(""), strdup(str));
+	if (str)
+		helper(strdup(str), 0, str, strlen(str));
 }

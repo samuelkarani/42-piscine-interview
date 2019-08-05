@@ -116,7 +116,7 @@ struct s_prices *readList()
 
 	dprintf(STDOUT_FILENO, "(INFO) Loading the file... ");
 	if (NULL == (file = readFile()))
-		readList_leave();       
+		readList_leave();
 	splitted = split(file, "\n");
 	for (len = 0; splitted[len]; len++)
 		;
@@ -223,5 +223,14 @@ double	arrayPrice(struct s_array *arr, double *prices)
 	double sum = 0;
 	for (int i = 0; i < arr->length; i++)
 		sum += prices[arr->content[i]];
-	return sum;	
+	return sum;
+}
+
+void arrayDeque(struct s_array *arr)
+{
+	if (arr->length - 1 >= 0)
+	{
+		arr->sum -= arr->content[arr->length - 1];
+		arr->length--;
+	}
 }

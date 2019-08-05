@@ -1,0 +1,2 @@
+time O(n^k) n = no of tables, k = no of people
+space O(n)

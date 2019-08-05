@@ -16,7 +16,7 @@ struct s_prices
 double bestPrice(int pizzaSize, double *prices);
 
 /*--------------------------------
-  ?? test function used in main 
+  ?? test function used in main
   --------------------------------*/
 
 // PARSING
@@ -38,5 +38,6 @@ int     arrayAppend(struct s_array *arr, int number);
 struct s_array *arrayClone(struct s_array *arr);
 void    arrayPrint(struct s_array *arr);
 double	arrayPrice(struct s_array *arr, double *prices);
+void 	arrayDeque(struct s_array *arr);
 
 #endif

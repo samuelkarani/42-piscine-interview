@@ -1,2 +1,2 @@
 time O(n) n = no of "1"s making an island
-space O(1). O(n) counting stack space
+space O(1)

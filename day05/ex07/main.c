@@ -20,11 +20,11 @@ int main(int ac, char **av)
 	/*-------------------
 	launch your test here
 	--------------------*/
-	
-	// palindrome = findPalindrome(sequence, nDelete);
-	// if (palindrome)
-	// 	printf("%s\n", palindrome);
-	
+
+	palindrome = findPalindrome(sequence, nDelete);
+	if (palindrome)
+		printf("%s\n", palindrome);
+
 	return (0);
 }
 

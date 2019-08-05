@@ -20,7 +20,7 @@ int main(int ac, char **av)
 	/*-------------------
 	launch your test here
 	--------------------*/
-	// printf("It is%s possible !\n", (isPossible(people, nbTable, totalTime)) ? "" : " NOT");
+	printf("It is%s possible !\n", (isPossible(people, nbTable, totalTime)) ? "" : " NOT");
 
 	return (0);
 }
@@ -119,7 +119,7 @@ struct s_people **readGuestList()
 
         dprintf(STDOUT_FILENO, "(INFO) Loading the file... ");
         if (NULL == (file = readFile()))
-                readList_leave();    
+                readList_leave();
         splitted = split(file, "\n");
         for (len = 0; splitted[len]; len++)
 		;

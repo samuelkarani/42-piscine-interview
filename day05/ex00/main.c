@@ -104,11 +104,8 @@ struct s_array *arrayClone(struct s_array *arr)
 void arrayDeque(struct s_array *arr)
 {
 	if (arr->length - 1 >= 0)
+	{
+		arr->sum -= arr->content[arr->length - 1];
 		arr->length--;
-}
-
-void arrayDeque_no(struct s_array *arr, int no)
-{
-	if (arr->length - no >= 0)
-		arr->length -= no;
+	}
 }

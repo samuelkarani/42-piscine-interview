@@ -6,37 +6,41 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/19 21:36:30 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/06/19 22:16:38 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/08/04 15:35:37 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "header.h"
 
-static double best;
-
-void	helper(int pizzaSize, struct s_array *a, double *prices)
+double helper(int pizzaSlice, double *prices, double best, struct s_array *arr)
 {
-	for (int i = pizzaSize; i > 0; i--) {
-		struct s_array *b = arrayClone(a);
-		arrayAppend(b, i);
-		if (b->sum == pizzaSize)
+	if (arr->sum == pizzaSlice)
+		return arrayPrice(arr, prices);
+	for (int i = pizzaSlice; i > 0; i--)
+	{
+		if (arr->sum + i <= pizzaSlice)
 		{
-            double price = arrayPrice(b, prices);
-            if (price > best)
-                best = price;
-        }
-		else if (b->sum < pizzaSize)
-			helper(pizzaSize, b, prices);
-		free(b);
+			arrayAppend(arr, i);
+			double p = helper(pizzaSlice, prices, best, arr);
+			if (p > best)
+				best = p;
+			arrayDeque(arr);
+		}
 	}
+	return best;
+}
+
+double bestPrice2(int pizzaSize, double *prices)
+{
+	return helper(pizzaSize, prices, 0, arrayInit());
 }
 
 double bestPrice(int pizzaSize, double *prices)
 {
-    struct s_array *a;
-    best = 0;
-	helper(pizzaSize, a = arrayInit(), prices);
-	free(a);
-    return best;
+	double d, best = prices[pizzaSize];
+	for (int i = 1; i < pizzaSize / 2 + 1; i++)
+		if ((d = bestPrice(i, prices) + bestPrice(pizzaSize - i, prices)) > best)
+			best = d;
+	return best;
 }

@@ -6,7 +6,7 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/18 22:24:46 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/08/02 18:22:23 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/08/03 01:33:53 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ void aloneCans(int *arr, int n)
 	while (i < n)
 	{
 		if (arr[i] & rightmost)
-			a = a ^ arr[i];
+			a ^= arr[i];
 		else
-			b = b ^ arr[i];
+			b ^= arr[i];
 		i++;
 	}
 	printf("%d\n%d\n", b, a);

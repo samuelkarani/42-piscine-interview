@@ -22,8 +22,8 @@ int main(int ac, char **av)
 	/*-------------------
 	launch your test here
 	--------------------*/
-	// printf("%d\n", minimumMoves(node));
-	
+	printf("%d\n", minimumMoves(node));
+
 	return (0);
 }
 
@@ -172,7 +172,7 @@ int	dictSearch(struct s_dict *dict, void *key)
 	pos = (unsigned int)key % dict->capacity;
 	tmp = dict->items[pos];
 	while (tmp){
-		if (tmp->key == key) 
+		if (tmp->key == key)
 			return (tmp->value);
 		tmp = tmp->next;
 	}
@@ -266,10 +266,10 @@ struct s_node *readLine(char *line, int isBoard){
 
 	b = NULL;
 	elems = split(line, "->");
-	for (int i = 0; elems[i]; i++){ 
+	for (int i = 0; elems[i]; i++){
 		tmp = malloc(sizeof(struct s_node));
 		if (atoi(elems[i]) != i + 1){
-			printf("(%s) __%s__ %d vs %d\n", line, elems[i], atoi(elems[i]),i+1); 
+			printf("(%s) __%s__ %d vs %d\n", line, elems[i], atoi(elems[i]),i+1);
 			parseFail("the list must be 1, 2, 3, 4...\n");
 		}
 		tmp->value = i + 1;
@@ -329,7 +329,7 @@ void	getAccess(struct s_node **branches, int len, int pos, char *line){
 		addAccess(branches, len, elems[i], n);
 		n = n->next;
 	}
-}	
+}
 
 struct s_node *getBoardFromFile(char *file)
 {
@@ -387,4 +387,3 @@ struct s_node *getBoardFromFile(char *file)
 	}*/
 	return (branches[0]);
 }
-
