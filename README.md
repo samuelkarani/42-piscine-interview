@@ -1,3 +1,5 @@
+#### All exercises for all days COMPLETE!
+
 - [x] **Day 0**: Arrays and Strings
 
 - [x] **Day 1**: Lists, Stacks and Queues
