@@ -1,2 +1,2 @@
-time O(8^n)
-space O(n)
+time O(n * 8^2)
+space O(n * 8^2)

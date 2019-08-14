@@ -13,13 +13,12 @@ int getInitialPos(uint64_t board);
 double knightOut(uint64_t board, int n);
 
 /*--------------------------------
-  ?? test function used in main 
+  ?? test function used in main
   --------------------------------*/
 void printBoard(uint64_t board);
 
 /*--------------------------------
   &  your own other function
   --------------------------------*/
-
 
 #endif

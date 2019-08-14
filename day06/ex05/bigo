@@ -1,0 +1,2 @@
+time O(n!) where n is no of stairs
+space O(1)

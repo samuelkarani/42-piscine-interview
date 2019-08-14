@@ -6,23 +6,27 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/20 22:12:56 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/08/12 23:30:05 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/08/13 14:08:25 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include "header.h"
 
-typedef struct s_point
-{
-	int i;
-	int j;
-} t_point;
+int rows[WIDTH] = {2, 2, 1, 1, -1, -1, -2, -2};
+int cols[WIDTH] = {1, -1, 2, -2, 2, -2, 1, -1};
 
-t_point pos(int n)
+void printTable(double **table)
 {
-	return (t_point){n / WIDTH, n % WIDTH};
+	for (int i = 0; i < WIDTH; i++)
+	{
+		for (int j = 0; j < WIDTH; j++)
+			printf("%lf", table[i][j]);
+		printf("\n");
+	}
+	printf("\n");
 }
 
 int valid(int i, int j)
@@ -30,10 +34,8 @@ int valid(int i, int j)
     return i >= 0 && i < WIDTH && j >= 0 && j < WIDTH;
 }
 
-uint64_t getVal(int i, int j)
+uint64_t getBoard(int i, int j)
 {
-	if (!valid(i, j))
-		return 0;
 	return 1ULL << (i * WIDTH + j);
 }
 
@@ -51,37 +53,79 @@ int getInitialPos(uint64_t board)
 
 double helper(uint64_t board, int n)
 {
-	double res;
-	int p;
-	t_point point;
-	uint64_t newBoard;
+	double res, prob;
+	int p, x, y, row, col;
 	if (n == 0)
-		return (double)1;
+		return 1.0;
+
 	p = getInitialPos(board);
-	point = pos(p);
+	y = p / WIDTH, x = p % WIDTH;
 	res = 0;
-	newBoard = getVal(point.i - 1, point.j - 2);
-	res += newBoard ? 1 / (double)WIDTH * helper(newBoard, n - 1) : 0;
-	newBoard = getVal(point.i - 1, point.j + 2);
-	res += newBoard ? 1 / (double)WIDTH * helper(newBoard, n - 1) : 0;
-	newBoard = getVal(point.i + 1, point.j - 2);
-	res += newBoard ? 1 / (double)WIDTH * helper(newBoard, n - 1) : 0;
-	newBoard = getVal(point.i + 1, point.j + 2);
-	res += newBoard ? 1 / (double)WIDTH * helper(newBoard, n - 1) : 0;
-	newBoard = getVal(point.i - 2, point.j - 1);
-	res += newBoard ? 1 / (double)WIDTH * helper(newBoard, n - 1) : 0;
-	newBoard = getVal(point.i - 2, point.j + 1);
-	res += newBoard ? 1 / (double)WIDTH * helper(newBoard, n - 1) : 0;
-	newBoard = getVal(point.i + 2, point.j - 1);
-	res += newBoard ? 1 / (double)WIDTH * helper(newBoard, n - 1) : 0;
-	newBoard = getVal(point.i + 2, point.j + 1);
-	res += newBoard ? 1 / (double)WIDTH * helper(newBoard, n - 1) : 0;
-	return 1 - res;
+	for (int i = 0; i < WIDTH; i++)
+	{
+		row = y + rows[i];
+		col = x + cols[i];
+		prob = valid(row, col) ? helper(getBoard(row, col), n - 1) / WIDTH : 0;
+		res += prob;
+	}
+	return res;
+}
+
+double knightOut2(uint64_t board, int n)
+{
+	if (getInitialPos(board) == -1 || n <= 0)
+		return -1;
+	return 1 - helper(board, n);
+}
+
+double **getTable()
+{
+	double **table = malloc(WIDTH * sizeof(double *));
+	for (int i = 0; i < WIDTH; i++)
+	{
+		table[i] = malloc(WIDTH * sizeof(double));
+		for (int j = 0; j < WIDTH; j++)
+			table[i][j] = 0.0;
+	}
+	return table;
 }
 
 double knightOut(uint64_t board, int n)
 {
+	double res, **table, **nTable;
+	int b, y, x;
 	if (getInitialPos(board) == -1 || n <= 0)
 		return -1;
-	return helper(board, n);
+
+	b = getInitialPos(board);
+	table = getTable();
+	y = b / WIDTH, x = b % WIDTH;
+	table[y][x] = 1.0;
+	for (int i = 0; i < n; i++)
+	{
+		nTable = getTable();
+		for (int r = 0; r < WIDTH; r++)
+		{
+			for (int c = 0; c < WIDTH; c++)
+			{
+				if (fabs(table[r][c]) > 10e-7)
+				{
+					for (int l = 0; l < WIDTH; l++)
+					{
+						y = r + rows[l];
+						x = c + cols[l];
+						if (valid(y, x))
+							nTable[y][x] += table[r][c] / (double)WIDTH;
+					}
+				}
+			}
+		}
+		table = nTable;
+		// printTable(table);
+	}
+	res = 0.0;
+	for (int i = 0; i < WIDTH; i++)
+		for (int j = 0; j < WIDTH; j++)
+			res += table[i][j];
+	return 1 - res;
 }

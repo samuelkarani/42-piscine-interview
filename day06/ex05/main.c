@@ -23,7 +23,7 @@ int main(int ac, char **av)
 	/*-------------------
 	launch your test here
 	--------------------*/
-	// printf("%.2lf\n", probaNephewWillLive(nStairs, nPunch, nephewStair));
+	printf("%.2lf\n", probaNephewWillLive(nStairs, nPunch, nephewStair));
 
 	return (0);
 }
@@ -32,4 +32,3 @@ int main(int ac, char **av)
 
 // Function used for the test
 // Don't go further :)
-

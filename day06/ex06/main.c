@@ -20,8 +20,8 @@ int main(int ac, char **av)
 	launch your test here
 	--------------------*/
 
-	// printf("Distance : Edges\n");
-	// printMST(graph);
+	printf("Distance : Edges\n");
+	printMST(graph);
 
 	return (0);
 }
