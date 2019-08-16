@@ -9,12 +9,19 @@ int main(void)
 {
 	struct s_graph *graph;
 
-	graph = getSquares("squares.txt");
-
 	/*-------------------
 	launch your test here
 	--------------------*/
+	// graph = getSquares("example1.txt");
+	// printf("%s : %.1f\n", "Node 3", maxTraffic(graph, "Node 3"));
 
+	// graph = getSquares("example2.txt");
+	// printf("%s : %.1f\n", "Node 3", maxTraffic(graph, "Node 3"));
+
+	graph = getSquares("example3.txt");
+	printf("%s : %.1f\n", "Node 0", maxTraffic(graph, "Node 0"));
+
+	// graph = getSquares("squares.txt");
 	// printf("%s : %.1f\n", "Place du Louvre", maxTraffic(graph, "Place du Louvre"));
 	// printf("%s : %.1f\n", "Place Pigalle", maxTraffic(graph, "Place Pigalle"));
 	// printf("%s : %.1f\n", "Place des Invalides", maxTraffic(graph, "Place des Invalides"));

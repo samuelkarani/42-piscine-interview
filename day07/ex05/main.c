@@ -21,10 +21,10 @@ int main(int ac, char **av)
 	launch your test here
 	--------------------*/
 
-	// if (!(output = neverForget(input, g_dict)))
-	// 	return (-1);
-	// printf("%s\n", output);
-	
+	if (!(output = neverForget(input, g_dict)))
+		return (-1);
+	printf("%s\n", output);
+
 	return (0);
 }
 

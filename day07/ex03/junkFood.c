@@ -6,78 +6,94 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/21 20:01:11 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/06/22 00:00:39 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/08/15 19:30:06 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include "header.h"
 
-int sizeStart(struct s_graph *graph, char *youAreHere, struct s_node **start)
+int sizeQueue(struct s_queue *queue)
 {
-    struct s_node *place;
-    int i = 0;
+	struct s_queueItem *node;
+	int i;
 
-    *start = NULL;
-    while ((place = graph->places[i]))
-    {
-        if (strcmp(place->name, youAreHere) == 0)
-            *start = place;
-        i++;
-    }
-    return i;
+	node = queue->first;
+	i = 0;
+	while (node)
+	{
+		node = node->next;
+		i++;
+	}
+	return i;
 }
 
-static int depth;
-
-int helper(struct s_queue *queue, struct s_sellers *res, int idx)
+struct s_node *startNode(struct s_graph *graph, char *youAreHere)
 {
-    
-    struct s_node *start, *neighbor;
-    int i;
+    struct s_node *place, *start;
+    start = NULL;
 
-    start = dequeue(queue);
-    if (!start)
-        return idx;
-    start->visited = 1;
-    if (start->hasCerealBar)
-        res->placeNames[idx++] = start->name;
-    else
-    {
-        i = -1;
-        while ((neighbor = start->connectedPlaces[++i]))
-        {
-            if (!neighbor->visited)
-                enqueue(queue, neighbor);
-        }
-        idx = helper(queue, res, idx);
-        depth++;
-    }
-    res->distance = depth;
-    return idx;
+    for (int i = 0; (place = graph->places[i]); i++)
+        if (!strcmp(place->name, youAreHere))
+            start = place;
+    return start;
 }
 
-#include <stdio.h>
 struct s_sellers *closestSellers(struct s_graph *graph, char *youAreHere)
 {
-    struct s_sellers *res;
-    int count, n;
-    struct s_node *start;
-    struct s_queue *queue;
+	struct s_queue *queue, *qSellers;
+	struct s_sellers *sellers;
+	struct s_node *node, *neighbor;
+    int n, idx, depth, c, prev;
 
-    res = malloc(sizeof(struct s_sellers));
-    count = sizeStart(graph, youAreHere, &start);
-    char *placeNames[count];
-    res->placeNames = placeNames;
-    depth = 0;
-    queue = queueInit();
-    enqueue(queue, start);
-    n = helper(queue, res, 0);
-    res->placeNames = malloc(n * sizeof(char *));
-    int i = -1;
-    while (++i < n)
-        printf("%d %s\n", i, placeNames[i]);
-    memcpy(res->placeNames, placeNames, sizeof(char *) * n);
-    return res;
+	node = startNode(graph, youAreHere);
+	if (!node)
+		return NULL;
+	queue = queueInit(), qSellers = queueInit();
+	enqueue(queue, node);
+	node->visited = 1;
+	c = 1, depth = 0, prev = 0;
+	while (!isEmpty(queue))
+	{
+		node = dequeue(queue);
+		for (int i = 0; (neighbor = node->connectedPlaces[i]); i++)
+		{
+			// printf("node %12s depth %d neighbor %s visited %d\n", node->name, depth, neighbor->name, neighbor->visited);
+			if (!neighbor->visited)
+			{
+				neighbor->visited = 1;
+				if (neighbor->hasCerealBar)
+					enqueue(qSellers, neighbor);
+				enqueue(queue, neighbor);
+				prev++;
+			}
+		}
+		c--;
+		if (c == 0)
+		{
+			c = prev;
+			prev = 0;
+			depth++;
+			if (!isEmpty(qSellers))
+				break ;
+		}
+	}
+	sellers = NULL;
+	if (!isEmpty(qSellers))
+	{
+		n = sizeQueue(qSellers);
+		sellers = malloc(sizeof(struct s_sellers));
+		sellers->placeNames = malloc((n + 1) * sizeof(char *));
+		sellers->distance = depth;
+		idx = 0;
+		while (!isEmpty(qSellers))
+		{
+			node = dequeue(qSellers);
+			sellers->placeNames[idx++] = strdup(node->name);
+		}
+		sellers->placeNames[idx] = NULL;
+	}
+	return sellers;
 }

@@ -14,4 +14,4 @@
 
 - [x] **Day 6**: Recursive n^2 & Greedy Algorithms
 
-- [x] **Day 7**:
+- [x] **Day 7**: Algorithms
