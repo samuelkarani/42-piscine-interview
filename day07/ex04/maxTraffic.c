@@ -6,7 +6,7 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/15 15:57:58 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/08/16 15:56:39 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/08/16 19:25:08 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,97 +17,109 @@
 
 struct s_node *startNode(struct s_graph *graph, char *youAreHere)
 {
-    struct s_node *place, *start;
-    start = NULL;
-
+    struct s_node *place;
     for (int i = 0; (place = graph->places[i]); i++)
         if (!strcmp(place->name, youAreHere))
-            start = place;
-    return start;
+            return place;
+    return NULL;
 }
 
-void resetVisited(struct s_node **nodes)
-{
-	for (int i = 0; nodes[i]; i++)
-		nodes[i]->visited = 0;
-}
-
-int getPaths(struct s_node *start, struct s_node *node)
+int setDepths(struct s_node *node)
 {
 	struct s_queue *queue;
 	struct s_node *neighbor;
-	int n, c, prev;
+	int d;
 
 	queue = queueInit();
 	node->visited = 1;
 	enqueue(queue, node);
-	n = 0, c = 1, prev = 0;
+	d = 0;
 	while (queue->first)
 	{
 		node = dequeue(queue);
-		if (node == start)
-			n++;
 		for (int j = 0; (neighbor = node->connectedPlaces[j]); j++)
 		{
 			if (!neighbor->visited)
 			{
-				if (neighbor != start)
-					node->visited = 1;
+				d = neighbor->visited = node->visited + 1;
 				enqueue(queue, neighbor);
-				prev++;
 			}
 		}
-		c--;
-		if (c == 0)
-		{
-			c = prev;
-			prev = 0;
-			if (n > 0)
-				break ;
-		}
 	}
-	return n;
+	return d;
+}
+
+int size(struct s_node **nodes)
+{
+	int i = 0;
+	for (; nodes[i]; i++)
+		;
+	return i;
+}
+
+int getNodes(struct s_node **nodes, int depth, struct s_node **res)
+{
+	int idx = 0;
+	for (int i = 0; nodes[i]; i++)
+	{
+		if (nodes[i]->visited == depth)
+			res[idx++] = nodes[i];
+	}
+	return idx;
+}
+
+int contains(struct s_node **nodes, struct s_node *node)
+{
+	for (int i = 0; nodes[i]; i++)
+		if (nodes[i] == node)
+			return 1;
+	return 0;
+}
+
+int getParents(struct s_node **nodes, struct s_node *node, struct s_node **res)
+{
+	int idx = 0;
+	for (int i = 0; nodes[i]; i++)
+	{
+		if (nodes[i]->visited == node->visited - 1 && contains(nodes[i]->connectedPlaces, node))
+			res[idx++] = nodes[i];
+	}
+	return idx;
 }
 
 float maxTraffic(struct s_graph *parisPlaces, char *eventHere)
 {
-	struct s_queue *queue;
-	struct s_node *node, *start, *neighbor;
-	int n;
-	float mx;
+	struct s_node *node, *start, *parent;
+	int n, d, c, p, s, mx;
 
 	if (!(start = startNode(parisPlaces, eventHere)))
 		return -1.0;
-	for (int i = 0; (node = parisPlaces->places[i]); i++)
-	{
-		if (node == start)
-			continue ;
-		n = getPaths(start, node);
-		printf("node %s paths %d\n", node->name, n);
-		if (n)
-			node->population /= n;
-		resetVisited(parisPlaces->places);
-	}
-	queue = queueInit();
-	start->visited = 1;
+	d = setDepths(start);
+	n = size(parisPlaces->places);
+	struct s_node *nodes[n], *parents[n];
 	start->population = 0;
-	enqueue(queue, start);
-	mx = 0.0;
-	while (queue->first)
+	for (int i = d; i > 1; i--)
 	{
-		node = dequeue(queue);
-		for (int i = 0; (neighbor = node->connectedPlaces[i]); i++)
+		c = getNodes(parisPlaces->places, i, nodes);
+		for (int j = 0; j < c; j++)
 		{
-			if (!neighbor->visited)
+			node = nodes[j];
+			if (node == start)
+				continue ;
+			p = getParents(parisPlaces->places, node, parents);
+			if (p > 0 && (s = node->population / p) > 0)
 			{
-				neighbor->visited = 1;
-				printf("neighbor %s population %d + %d\n", neighbor->name,neighbor->population, node->population);
-				neighbor->population += node->population;
-				enqueue(queue, neighbor);
-				if (neighbor->population > mx)
-					mx = neighbor->population;
+				for (int k = 0; k < p; k++)
+				{
+					parent = parents[k];
+					parent->population += s;
+				}
 			}
 		}
 	}
-	return mx;
+	mx = 0;
+	for (int i = 0; (node = start->connectedPlaces[i]); i++)
+		if (node->population > mx)
+			mx = node->population;
+	return (float)mx;
 }

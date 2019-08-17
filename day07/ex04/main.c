@@ -12,20 +12,23 @@ int main(void)
 	/*-------------------
 	launch your test here
 	--------------------*/
-	// graph = getSquares("example1.txt");
-	// printf("%s : %.1f\n", "Node 3", maxTraffic(graph, "Node 3"));
+	graph = getSquares("example1.txt");
+	printf("%s : %.1f\n", "Node 3", maxTraffic(graph, "Node 3"));
 
-	// graph = getSquares("example2.txt");
-	// printf("%s : %.1f\n", "Node 3", maxTraffic(graph, "Node 3"));
+	graph = getSquares("example2.txt");
+	printf("%s : %.1f\n", "Node 3", maxTraffic(graph, "Node 3"));
 
 	graph = getSquares("example3.txt");
 	printf("%s : %.1f\n", "Node 0", maxTraffic(graph, "Node 0"));
 
-	// graph = getSquares("squares.txt");
-	// printf("%s : %.1f\n", "Place du Louvre", maxTraffic(graph, "Place du Louvre"));
-	// printf("%s : %.1f\n", "Place Pigalle", maxTraffic(graph, "Place Pigalle"));
-	// printf("%s : %.1f\n", "Place des Invalides", maxTraffic(graph, "Place des Invalides"));
-	// printf("%s : %.1f\n", "I do not exist", maxTraffic(graph, "I do not exist"));
+	graph = getSquares("squares.txt");
+	printf("%s : %.1f\n", "Place du Louvre", maxTraffic(graph, "Place du Louvre"));
+	graph = getSquares("squares.txt");
+	printf("%s : %.1f\n", "Place Pigalle", maxTraffic(graph, "Place Pigalle"));
+	graph = getSquares("squares.txt");
+	printf("%s : %.1f\n", "Place des Invalides", maxTraffic(graph, "Place des Invalides"));
+	graph = getSquares("squares.txt");
+	printf("%s : %.1f\n", "I do not exist", maxTraffic(graph, "I do not exist"));
 
 	return (0);
 }
