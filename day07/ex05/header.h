@@ -34,8 +34,6 @@ char *get_content(char *file);
 struct s_word
 {
 	char *word;
-	char *modified;
-	int index;
 	int len;
 	struct s_word *next;
 };

@@ -6,82 +6,16 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 19:44:00 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/08/17 11:29:53 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/08/17 18:06:57 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
 
-int sizeList(struct s_word *words)
-{
-	int i = 0;
-	while (words)
-	{
-		words = words->next;
-		i++;
-	}
-	return i;
-}
-
-int numWords(char **dictionary)
-{
-	int i = 0;
-	for (i = 0; dictionary[i]; i++)
-		;
-	return i;
-}
-
-int cmp(const void *a, const void *b)
-{
-	char **s = (char **)a;
-	char **r = (char **)b;
-	int x = strlen((char *)*s), y = strlen((char *)*r);
-	if (x < y)
-		return -1;
-	if (x == y)
-		return 0;
-	return 1;
-}
-
-int findIndex(struct s_word *dict, int len)
-{
-	for (int i = 0; dict; dict = dict->next, i++)
-	{
-		if (dict->len == len)
-			return i;
-	}
-	return -1;
-}
-
-void fsort(struct s_word *words)
-{
-	struct s_word *i, *j;
-	int tlen;
-	char *tword;
-
-	for (i = words; i->next; i = i->next)
-	{
-		for (j = words; j->next; j = j->next)
-		{
-			if (j->len > j->next->len)
-			{
-				tword = j->word;
-				tlen = j->len;
-				j->word = j->next->word;
-				j->len = j->next->len;
-				j->next->word = tword;
-				j->next->len = tlen;
-			}
-		}
-	}
-}
-
 struct s_word *createWord(char *word)
 {
 	struct s_word *wordNode = malloc(sizeof(struct s_word));
 	wordNode->word = word;
-	wordNode->modified = NULL;
-	wordNode->index = -1;
 	wordNode->len = strlen(word);
 	return wordNode;
 }
@@ -133,103 +67,239 @@ struct s_word *parse(char *words)
 	return startNode;
 }
 
+int numWords(char **dictionary)
+{
+	int i = 0;
+	for (i = 0; dictionary[i]; i++)
+		;
+	return i;
+}
+
+int cmp_len(const void *a, const void *b)
+{
+	char **s = (char **)a;
+	char **r = (char **)b;
+	int x = strlen((char *)*s), y = strlen((char *)*r);
+	if (x < y)
+		return -1;
+	if (x == y)
+		return 0;
+	return 1;
+}
+
+int cmp_alpha(const void *a, const void *b)
+{
+	char **s = (char **)a;
+	char **r = (char **)b;
+	return strcmp((char *)*s, (char *)*r);
+}
+
+void fsort(struct s_word *words)
+{
+	struct s_word *i, *j;
+	int tlen;
+	char *tword;
+
+	for (i = words; i->next; i = i->next)
+	{
+		for (j = words; j->next; j = j->next)
+		{
+			if (j->len > j->next->len)
+			{
+				tword = j->word;
+				tlen = j->len;
+				j->word = j->next->word;
+				j->len = j->next->len;
+				j->next->word = tword;
+				j->next->len = tlen;
+			}
+		}
+	}
+}
+
+int sizeList(struct s_word *words)
+{
+	int i = 0;
+	while (words)
+	{
+		words = words->next;
+		i++;
+	}
+	return i;
+}
+
+void printWords(char **words, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		printf("%s\n", words[i]);
+	}
+}
+
 void printAlpha(char *alphabet)
 {
 	for (int i = 0; i < 127; i++)
 		if (alphabet[i])
-			printf("%c vs %c\n", (char)i, alphabet[i]);
+			printf("%c = %c, ", (char)i, alphabet[i]);
+}
+
+void undoAlpha(char *alphabet, char *unique, char *from, int n)
+{
+	for (int i = 0;i < n; i++)
+	{
+		if (alphabet[(int)unique[i]] && from[i] == '?')
+			alphabet[(int)unique[i]] = 0;
+	}
+}
+
+int setAlpha(char *alphabet, char *unique, char *to, char *from)
+{
+	int n = 0;
+	for (int i = 0; unique[i]; i++)
+	{
+		if (from[i] == '?')
+		{
+			if (alphabet[(int)unique[i]])
+			{
+				printf("failed to set %c = %c\n", unique[i], alphabet[(int)unique[i]]);
+				undoAlpha(alphabet, unique, from, i);
+				return 0;
+			}
+			else
+			{
+				alphabet[(int)unique[i]] = to[i];
+				n++;
+			}
+		}
+	}
+	return n;
+}
+
+char *modify(char *word, char *alphabet)
+{
+	char *res = strdup(word);
+	for (int i = 0; res[i]; i++)
+	{
+		if (alphabet[(int)res[i]])
+			res[i] = alphabet[(int)res[i]];
+		else
+			res[i] = '?';
+	}
+	return res;
+}
+
+int find(char **dictionary, int w, int len)
+{
+	int start, end, mid, l;
+
+	start = 0, end = w - 1;
+	while (start < end)
+	{
+		mid = (start + end) / 2;
+		l = strlen(dictionary[mid]);
+		if (l == len)
+			return mid;
+		if (len > l)
+			start = mid + 1;
+		else
+			end = mid - 1;
+	}
+	return -1;
+}
+
+int contains(char *word, char *dictWord)
+{
+	for (int i = 0; word[i]; i++)
+		if (word[i] != '?' && word[i] != dictWord[i])
+			return 0;
+	return 1;
+}
+
+int getPossible(char *word, char **dictionary, int w, char **buffer)
+{
+	int f, i, l, idx;
+
+	f = find(dictionary, w, strlen(word));
+	l = strlen(word);
+	idx = 0;
+	i = f;
+	while ((int)strlen(dictionary[i]) == l)
+	{
+		if (contains(word, dictionary[i]))
+			buffer[idx++] = dictionary[i];
+		i--;
+	}
+	i = f;
+	while ((int)strlen(dictionary[i]) == l)
+	{
+		if (contains(word, dictionary[i]))
+			buffer[idx++] = dictionary[i];
+		i++;
+	}
+	return idx;
+}
+
+int getUnique(struct s_word *node, char **buffer)
+{
+	struct s_word *prev = NULL;
+	int idx = 0;
+	while (node)
+	{
+		if (idx == 0 || strlen(node->word) > strlen(prev->word))
+			buffer[idx++] = node->word;
+		prev = node;
+		node = node->next;
+	}
+	return idx;
+}
+
+int helper(char **uniqueWords, int n, char **dictionary, int w, char *alphabet, int index)
+{
+	char *from, *to;
+	int p;
+
+	if (index == n)
+		return 1;
+	char *buffer[w];
+	from = modify(uniqueWords[index], alphabet);
+	p = getPossible(from, dictionary, w, buffer);
+	// printWords(buffer, p);
+	printAlpha(alphabet);
+	printf("possible %d for %s\n", p, uniqueWords[index]);
+	for (int i = 0; i < p; i++)
+	{
+		to = buffer[i];
+		printf("%d: %s = %s from %s\n", i, uniqueWords[index], to, from);
+		if (!setAlpha(alphabet, uniqueWords[index], to, from))
+			continue ;
+		printf("\n");
+		if (helper(uniqueWords, n, dictionary, w, alphabet, index + 1))
+			return 1;
+		else
+		{
+			printf("backtracking...\n");
+			undoAlpha(alphabet, uniqueWords[index], from, strlen(uniqueWords[index]));
+		}
+	}
+	return 0;
 }
 
 char *neverForget(char *words, char **dictionary)
 {
-	struct s_word *wordNode, *node, *dictList;
-	char *r;
+	struct s_word *node;
 	char alphabet[127] = {0};
+	int found, n, w;
 
-	if (!words || !dictionary || !dictionary[0] || !isValid(words))
+	if (!words || !dictionary || !dictionary[0] || !isValid(words) || !(node = parse(words)))
 		return NULL;
 
-	wordNode = parse(words);
+	fsort(node);
+	mergesort(dictionary, w = numWords(dictionary), sizeof(char *), &cmp_len);
 
-	if (!words)
-		return NULL;
-
-	fsort(wordNode);
-	mergesort(dictionary, numWords(dictionary), sizeof(char *), &cmp);
-
-	dictList = node = createWord(dictionary[0]);
-	for (int i = 1; dictionary[i]; i++)
-	{
-		node->next = createWord(dictionary[i]);
-		node = node->next;
-	}
-
-	int n, index, a, c, fail, k;
-	n = sizeList(wordNode);
-	char *stack[n]; int si = 0;
-
-	node = wordNode;
-	a = 0, si = 0;
-	while (wordNode)
-	{
-		fail = 0;
-		if (wordNode->index == -1)
-		{
-			index = findIndex(dictList, wordNode->len);
-			if (index == -1)
-				return NULL;
-			wordNode->index = index;
-		}
-		else
-		{
-			if ((int)strlen(dictionary[wordNode->index + 1]) > wordNode->len)
-				fail = 1;
-			wordNode->index++;
-		}
-
-		if (fail)
-			r = NULL;
-		else
-			r = dictionary[wordNode->index];
-		printf("%s %s\n", wordNode->word, r);
-
-		if (!fail)
-		{
-			k = 0;
-			for (int i = 0; (c = wordNode->word[i]); i++)
-			{
-				if (alphabet[(int)r[i]])
-				{
-					fail = 1;
-					break ;
-				}
-				if (!alphabet[c])
-				{
-					alphabet[c] = r[i];
-					a++;
-					k++;
-				}
-			}
-		}
-		if (fail)
-		{
-			if (!r)
-				r = stack[--si];
-			for (int i = 0; (c = r[i]) && i < k; i++)
-			{
-				alphabet[c] = 0;
-				a--;
-			}
-			wordNode = node;
-			continue ;
-		}
-		stack[si++] = r;
-		wordNode->modified = r;
-		wordNode = wordNode->next;
-		if (a == 26)
-			break ;
-	}
-
-	printAlpha(alphabet);
+	n = sizeList(node);
+	char *uniqueWords[n];
+	n = getUnique(node, uniqueWords);
+	// printWords(uniqueWords, n);
+	found = helper(uniqueWords, n, dictionary, w, alphabet, 0);
 	return NULL;
 }
