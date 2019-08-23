@@ -6,7 +6,7 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 19:44:00 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/08/17 18:06:57 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/08/21 15:55:36 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,9 +131,7 @@ int sizeList(struct s_word *words)
 void printWords(char **words, int n)
 {
 	for (int i = 0; i < n; i++)
-	{
 		printf("%s\n", words[i]);
-	}
 }
 
 void printAlpha(char *alphabet)
@@ -161,7 +159,7 @@ int setAlpha(char *alphabet, char *unique, char *to, char *from)
 		{
 			if (alphabet[(int)unique[i]])
 			{
-				printf("failed to set %c = %c\n", unique[i], alphabet[(int)unique[i]]);
+				// printf("failed to set %c = %c\n", unique[i], alphabet[(int)unique[i]]);
 				undoAlpha(alphabet, unique, from, i);
 				return 0;
 			}
@@ -264,20 +262,20 @@ int helper(char **uniqueWords, int n, char **dictionary, int w, char *alphabet, 
 	from = modify(uniqueWords[index], alphabet);
 	p = getPossible(from, dictionary, w, buffer);
 	// printWords(buffer, p);
-	printAlpha(alphabet);
-	printf("possible %d for %s\n", p, uniqueWords[index]);
+	// printAlpha(alphabet);
+	// printf("possible %d for %s\n", p, uniqueWords[index]);
 	for (int i = 0; i < p; i++)
 	{
 		to = buffer[i];
-		printf("%d: %s = %s from %s\n", i, uniqueWords[index], to, from);
+		// printf("%d: %s = %s from %s\n", i, uniqueWords[index], to, from);
 		if (!setAlpha(alphabet, uniqueWords[index], to, from))
 			continue ;
-		printf("\n");
+		// printf("\n");
 		if (helper(uniqueWords, n, dictionary, w, alphabet, index + 1))
 			return 1;
 		else
 		{
-			printf("backtracking...\n");
+			// printf("backtracking...\n");
 			undoAlpha(alphabet, uniqueWords[index], from, strlen(uniqueWords[index]));
 		}
 	}

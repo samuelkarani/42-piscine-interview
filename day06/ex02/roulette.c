@@ -6,7 +6,7 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/20 17:22:07 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/08/12 21:18:54 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/08/21 12:15:52 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,17 @@
 #define RED 18/37
 #define GRN  1/37
 
-double calc(double p, double k)
-{
-    return p == (double)0 ? k : p * k;
-}
-
-double helper(double firstDollarsBet, double dollarsWanted, int nbGame, double p)
-{
-    if (nbGame == 0 || firstDollarsBet == 0)
-        return firstDollarsBet >= dollarsWanted ? calc(p, 1) : 0;
-    if (firstDollarsBet >= dollarsWanted)
-        return calc(p, 1);
-    double sum;
-    sum = 0;
-    sum += helper(firstDollarsBet * 2, dollarsWanted, nbGame - 1, calc(p, (double)RED));
-    sum += helper(firstDollarsBet / 2, dollarsWanted, nbGame - 1, calc(p, (double)GRN));
-    sum += helper(0, dollarsWanted, nbGame - 1, calc(p, (double)BLK));
-    return sum;
-}
-
 double probabilityWin(double firstDollarsBet, double dollarsWanted, int nbGame)
 {
 	if (firstDollarsBet < 0 || dollarsWanted < 0 || nbGame < 0)
-		return 0;
-    return helper(firstDollarsBet, dollarsWanted, nbGame, 0);
+		return 0.0;
+    if (nbGame == 0 || firstDollarsBet == 0)
+        return (double)(firstDollarsBet >= dollarsWanted);
+    if (firstDollarsBet >= dollarsWanted)
+        return 1.0;
+	double sum = 0;
+    sum += (double)RED * probabilityWin(firstDollarsBet * 2, dollarsWanted, nbGame - 1);
+    sum += (double)GRN * probabilityWin(firstDollarsBet / 2, dollarsWanted, nbGame - 1);
+    sum += (double)BLK * probabilityWin(0, dollarsWanted, nbGame - 1);
+    return sum;
 }

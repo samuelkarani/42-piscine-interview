@@ -6,7 +6,7 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/20 22:12:56 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/08/13 14:08:25 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/08/21 12:28:03 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,22 +53,21 @@ int getInitialPos(uint64_t board)
 
 double helper(uint64_t board, int n)
 {
-	double res, prob;
-	int p, x, y, row, col;
+	double sum, prob, r, c;
+	int p, x, y;
+
 	if (n == 0)
 		return 1.0;
-
 	p = getInitialPos(board);
 	y = p / WIDTH, x = p % WIDTH;
-	res = 0;
+	sum = 0;
 	for (int i = 0; i < WIDTH; i++)
 	{
-		row = y + rows[i];
-		col = x + cols[i];
-		prob = valid(row, col) ? helper(getBoard(row, col), n - 1) / WIDTH : 0;
-		res += prob;
+		r = y + rows[i], c = x + cols[i];
+		prob = valid(r, c) ? helper(getBoard(r, c), n - 1) : 0.0;
+		sum += prob;
 	}
-	return res;
+	return sum / (double)WIDTH;
 }
 
 double knightOut2(uint64_t board, int n)
