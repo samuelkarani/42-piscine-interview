@@ -6,7 +6,7 @@
 /*   By: smbaabu <smbaabu@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/16 19:44:00 by smbaabu           #+#    #+#             */
-/*   Updated: 2019/08/21 15:55:36 by smbaabu          ###   ########.fr       */
+/*   Updated: 2019/08/28 23:48:49 by smbaabu          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ struct s_word *createWord(char *word)
 {
 	struct s_word *wordNode = malloc(sizeof(struct s_word));
 	wordNode->word = word;
+	wordNode->modified = strdup(word);
 	wordNode->len = strlen(word);
 	return wordNode;
 }
@@ -280,6 +281,55 @@ int helper(char **uniqueWords, int n, char **dictionary, int w, char *alphabet, 
 		}
 	}
 	return 0;
+}
+
+char *singles[] = {"e", "t", "a", "i", "n", "s", "h", "r", "d", "l", "u", NULL};
+char *oneLetter[] = {"a", "i", NULL};
+char *twoLetters[] = {"of", "to", "in", "it", "is", "be", "as", "at", "so", "we", "he", "by", "or", "on", "do", "if", "me", "my", "up", "an", "go", "no", "us", "am", NULL};
+char *threeLetters[] = {
+	"the", "and", "for", "are", "but", "not", "you", "all", "any", "can", "had", "her", "was", "one", "our", "out", "day", "get", "has", "him", "his", "how", "man", "new", "now", "old", "see", "two", "way", "who", "boy", "did", "its", "let", "put", "say", "she", "too", "use", NULL};
+char *fourLetter[] = {
+	"that", "with", "have", "this", "will", "your", "from", "they", "know", "want", "been", "good", "much", "some", "time", NULL};
+// char *digraphs[] = {"th", "er", "on", "an", "re", "he", "in", "ed", "nd", "ha", "at", "en", "es", "of", "or", "nt", "ea", "ti", "to", "it", "st", "io", "le", "is", "ou", "ar", "as", "de", "rt", "ve", NULL};
+// char *trigraphs[] = {
+// 	"the", "and", "tha", "ent", "ion", "tio", "for", "nde", "has", "nce", "edt", "tis", "oft", "sth", "men", NULL};
+char *doubles[] = {"ss", "ee", "tt", "ff", "ll", "mm", "oo"};
+char *initial[] = { "t", "o", "a", "w", "b", "c", "d", "s", "f", "m", "r", "h", "i", "y", "e", "g", "l", "n", "p", "u", "j", "k"};
+char *final[] = {"e", "s", "t", "d", "n", "r", "y", "f", "l", "o", "g", "h", "a", "k", "m", "p", "u", "w", NULL};
+
+void lower(char *word);
+
+void sortByOccurence(char *word, char *tbl);
+
+void replace(char *word, char *from, char *to);
+void undo(char *word, char *from, char *to);
+
+char *str(char c);
+
+// idea function backtraing
+void solver(char *word, char *alphabet)
+{
+	int idx;
+	char tbl[26], *from, *to;
+
+	lower(word);
+	sortByOccurence(word, tbl);
+	idx = 0;
+	for (int i = 0; singles[i]; i++)
+	{
+		from = str('a' + tbl[idx++]);
+		to = singles[i];
+		replace(word, from, to);
+		for (int j = 0; oneLetter[j]; j++)
+		{
+			to = oneLetter[j];
+			replace(word, NULL, to);
+			for (int k = 0; twoLetters[k]; k++)
+			{
+			}
+		}
+		undo(word, from, to);
+	}
 }
 
 char *neverForget(char *words, char **dictionary)
