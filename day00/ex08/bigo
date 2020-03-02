@@ -1,2 +1,2 @@
-time O(2^k * n + m) where n is input and m dictionary k is depth
+time O((2^k * n) + m) where n is input and m dictionary k is depth
 space O(2^k * n)
