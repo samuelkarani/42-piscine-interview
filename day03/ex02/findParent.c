@@ -2,24 +2,41 @@
 #include <string.h>
 #include "header.h"
 
-struct s_node *findParent(struct s_node *root, char *firstSpecies, char *secondSpecies)
+int  contains(struct s_node *root, char *s)
+{
+	if (!root) 	return 0;
+	if (!strcmp(root->name, s))
+		return 1;
+	for (int i = 0; root->children[i]; i++)
+		if (contains(root->children[i], s))
+			return 1;
+	return 0;
+}
+
+
+struct s_node *search(struct s_node *root, char *firstSpecies, char *secondSpecies)
 {
 	if (!root)
 		return NULL;
 	if (!strcmp(root->name, firstSpecies) || !strcmp(root->name, secondSpecies))
 		return root;
-	struct s_node *node, *res = NULL;
+	struct s_node *node, *prev = NULL;
 	for (int i = 0; root->children[i]; i++)
 	{
-		node = findParent(root->children[i], firstSpecies, secondSpecies);
-		if (node && res)
+		node = search(root->children[i], firstSpecies, secondSpecies);
+		if (node && prev)
 			return root;
 		if (node)
-		{
-			if (strcmp(node->name, firstSpecies) && strcmp(node->name, secondSpecies))
-				return node;
-			res = node;
-		}
+			prev = node;
 	}
-	return res;
+	return prev;
+}
+
+
+
+struct s_node *findParent(struct s_node *root, char *firstSpecies, char *secondSpecies)
+{
+	if (!(contains(root, firstSpecies)  && contains(root, secondSpecies)))
+		return NULL;
+	return search(root, firstSpecies, secondSpecies);
 }

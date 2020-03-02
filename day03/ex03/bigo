@@ -1,2 +1,2 @@
-time O(n)
-space o(1)
+time O(nlogn)
+space O(1)
