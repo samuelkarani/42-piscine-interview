@@ -1,5 +1,5 @@
 createTrie
-time O(nm) n = no of words m = avg word length (more accurately m!/(m - n)!)
+time O(nm) n = no of words m = avg word length (more accurately O(m!/(m - n)!))
 space O(nm)
 
 understand

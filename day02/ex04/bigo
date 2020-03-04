@@ -1,2 +1,2 @@
-time O(n)
-space O(n)
+time O(n + k)
+space O(n + k)

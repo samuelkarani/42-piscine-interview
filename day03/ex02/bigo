@@ -1,2 +1,2 @@
-time O(n)
+time O(3n)
 space O(1)

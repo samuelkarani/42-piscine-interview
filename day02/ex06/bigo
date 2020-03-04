@@ -4,7 +4,7 @@ space O(k)
 
 sortCriminals
 time O(d(n + b)) where d = no of sort iterations,  b = 10
-space O(n + k)
+space O(d(n + b))
 
 getDescription:
 time O(1)

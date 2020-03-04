@@ -8,7 +8,7 @@ Let’s say you have a very large array of strings and you just have enough RAM 
 extenal mergesort
 
 Given an almost sorted array of 10k elements. Which sort algorithm would you choose?
-insertion sort
+quick sort
 
 Given an array which is almost sorted, and only one element is not at his good place, Which sorting algorithm would you choose?
 insertion sort
