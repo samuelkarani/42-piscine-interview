@@ -1,2 +1,2 @@
-time O(k^n) k = nDelete, n = characters in word
-space O(nk)
+time O(n!/(n-k)!) k = depth, n = word
+space O(n!/(n-k)!)

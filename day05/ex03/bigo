@@ -1,2 +1,2 @@
-time O(n) n = no of "1"s making an island
+time O(n) n no of islands
 space O(1)
